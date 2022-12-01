@@ -1,0 +1,65 @@
+{
+  "kind": "singleType",
+  "collectionName": "homepages",
+  "info": {
+    "singularName": "homepage",
+    "pluralName": "homepages",
+    "displayName": "Homepage"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "carousel": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "cta_title": {
+      "type": "string"
+    },
+    "cta_descr": {
+      "type": "richtext"
+    },
+    "cta_img": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "cta_btn_text": {
+      "type": "string"
+    },
+    "services_title": {
+      "type": "string"
+    },
+    "services_descr": {
+      "type": "richtext"
+    },
+    "contact_title": {
+      "type": "string"
+    },
+    "contact_descr": {
+      "type": "richtext"
+    },
+    "contact_name": {
+      "type": "string"
+    },
+    "contact_position": {
+      "type": "string"
+    },
+    "contact_phone_number": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "email"
+    },
+    "facebook_link": {
+      "type": "string"
+    }
+  }
+}
