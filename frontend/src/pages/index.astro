@@ -1,15 +1,63 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
-const response = await fetch('http://localhost:1337/api/homepage?populate=*');
-const data = await response.json();
+const strapiUrl = 'http://localhost:1337';
+const response = await fetch(`${strapiUrl}/graphql`, 
+{
+	method: 'POST',
+	headers: {
+		'Content-Type': 'application/json',
+	},
+	body: JSON.stringify({
+		query: `
+			query {
+				homepage {
+					data {
+						attributes {
+							cta_title
+							cta_descr
+							cta_img {
+								data {
+									attributes {
+										name
+										alternativeText
+										formats
+									}
+								}
+							}
+							carousel {
+								data {
+									attributes {
+										name
+										alternativeText
+										formats
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+		`,
+	}),
+});
+
+const json = await response.json();
+const data  = json.data.homepage.data.attributes;
+// clean up data
+const {cta_title, cta_descr, cta_img } = data;
 
 
 ---
 
 <Layout title="Welcome to Astro.">
 	<main>
-		<h1>Hello World</h1>
+		<h1>Hello World {cta_title}</h1>
+		<p>{cta_descr}</p>
+		<img 
+		src={`${strapiUrl}${cta_img.data.attributes.formats.small.url}`} 
+		alt={cta_img.data.attributes.alternativeText}/>
 		<pre>{JSON.stringify(data, null, 2)}</pre>
 	</main>
 </Layout>
