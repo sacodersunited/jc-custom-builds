@@ -25,6 +25,7 @@ const response = await fetch(`${strapiUrl}/graphql`,
 									}
 								}
 							}
+							cta_btn_text
 							carousel {
 								data {
 									attributes {
@@ -46,18 +47,33 @@ const response = await fetch(`${strapiUrl}/graphql`,
 const json = await response.json();
 const data  = json.data.homepage.data.attributes;
 // clean up data
-const {cta_title, cta_descr, cta_img } = data;
+const homepage = {
+	ctaTitle: data.cta_title,
+	ctaDescr: data.cta_descr,
+	ctaImg: data.cta_img.data.attributes.formats.small.url,
+	ctaImgAlt: data.cta_img.data.attributes.alternativeText,
+	ctaBtnText: data.cta_btn_text,
+}
 
 
 ---
 
-<Layout title="Welcome to Astro.">
+<Layout  title="Jeffrey Custom Builds">
 	<main>
-		<h1>Hello World {cta_title}</h1>
-		<p>{cta_descr}</p>
-		<img 
-		src={`${strapiUrl}${cta_img.data.attributes.formats.small.url}`} 
-		alt={cta_img.data.attributes.alternativeText}/>
+		<section class="cta bg-white p-10 rounded-md shadow-md">
+			<div class="flex">
+				<img 
+				class="w-28	h-28 object-cover rounded-full"
+				src={`${strapiUrl}${homepage.ctaImg}`} 
+				alt={homepage.ctaImgAlt}/>
+				<div class="ml-4">
+					<h2 class="text-gray-800 text-3xl font-serif" >{homepage.ctaTitle}</h2>
+					<p class="text-gray-600 mt-2">{homepage.ctaDescr}</p>
+					<a class="rounded bg-slate-900 text-white px-4 py-2 mt-4 inline-block text-sm" href="#">{homepage.ctaBtnText}</a>
+				</div>
+			</div>
+		</section>
+		<p>{homepage.ctaDescr}</p>
 		<pre>{JSON.stringify(data, null, 2)}</pre>
 	</main>
 </Layout>
@@ -66,43 +82,7 @@ const {cta_title, cta_descr, cta_img } = data;
 	main {
 		margin: auto;
 		padding: 1.5rem;
-		max-width: 60ch;
+		max-width: 80ch;
 	}
-	h1 {
-		font-size: 3rem;
-		font-weight: 800;
-		margin: 0;
-	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
-	}
-	.instructions {
-		line-height: 1.6;
-		margin: 1rem 0;
-		border: 1px solid rgba(var(--accent), 25%);
-		background-color: white;
-		padding: 1rem;
-		border-radius: 0.4rem;
-	}
-	.instructions code {
-		font-size: 0.875em;
-		font-weight: bold;
-		background: rgba(var(--accent), 12%);
-		color: rgb(var(--accent));
-		border-radius: 4px;
-		padding: 0.3em 0.45em;
-	}
-	.instructions strong {
-		color: rgb(var(--accent));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 1rem;
-		padding: 0;
-	}
+	
 </style>
