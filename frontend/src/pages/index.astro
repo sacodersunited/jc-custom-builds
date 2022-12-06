@@ -47,12 +47,12 @@ const response = await fetch(`${strapiUrl}/graphql`,
 const json = await response.json();
 const data  = json.data.homepage.data.attributes;
 // clean up data
-const homepage = {
-	ctaTitle: data.cta_title,
-	ctaDescr: data.cta_descr,
-	ctaImg: data.cta_img.data.attributes.formats.small.url,
-	ctaImgAlt: data.cta_img.data.attributes.alternativeText,
-	ctaBtnText: data.cta_btn_text,
+const cta = {
+	title: data.cta_title,
+	descr: data.cta_descr,
+	img: data.cta_img.data.attributes.formats.small.url,
+	imgAlt: data.cta_img.data.attributes.alternativeText,
+	btnText: data.cta_btn_text,
 }
 
 
@@ -60,7 +60,7 @@ const homepage = {
 
 <Layout  title="Jeffrey Custom Builds">
 	<main>
-		<CtaCard strapiUrl={strapiUrl} image={homepage.ctaImg} title={homepage.ctaTitle} descr={homepage.ctaDescr} btnText={homepage.ctaBtnText} alt={homepage.ctaImgAlt}/>
+		<CtaCard strapiUrl={strapiUrl} image={cta.img} title={cta.title} descr={cta.descr} btnText={cta.btnText} alt={cta.imgAlt}/>
 		<!-- <pre>{JSON.stringify(data, null, 2)}</pre> -->
 	</main>
 </Layout>
