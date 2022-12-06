@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CtaCard from '../components/CtaCard.astro';
+import { marked  } from 'marked';
 const strapiUrl = 'http://localhost:1337';
 const response = await fetch(`${strapiUrl}/graphql`, 
 {
@@ -26,6 +27,13 @@ const response = await fetch(`${strapiUrl}/graphql`,
 								}
 							}
 							cta_btn_text
+							contact_title
+							contact_descr
+							contact_name
+							contact_position
+							contact_phone_number
+							contact_email
+							facebook_link
 							carousel {
 								data {
 									attributes {
@@ -55,13 +63,40 @@ const cta = {
 	btnText: data.cta_btn_text,
 }
 
+const contact = {
+	title: data.contact_title,
+	descr: marked.parse(data.contact_descr),
+	name: data.contact_name,
+	position: data.contact_position,
+	phone: data.contact_phone_number,
+	email: data.contact_email,
+	facebook: data.facebook_link,
+}
+
 
 ---
 
 <Layout  title="Jeffrey Custom Builds">
 	<main>
 		<CtaCard strapiUrl={strapiUrl} image={cta.img} title={cta.title} descr={cta.descr} btnText={cta.btnText} alt={cta.imgAlt}/>
-		<!-- <pre>{JSON.stringify(data, null, 2)}</pre> -->
+		<!-- <pre>{JSON.stringify(contact, null, 2)}</pre> -->
+		<section class="contact flex mt-5">
+			<div class="left">
+				<h2 class="text-3xl font-serif">{contact.title}</h2>
+				<p set:html={contact.descr}/>
+			</div>
+			<div class="right">
+				<div class="bg-slate-600 p-10 rounded-lg text-slate-100 text-center">
+					<h3 class="text-2xl">{contact.name}</h3>
+					<p>{contact.position}</p>
+					<a href={`tel:${contact.phone}`}>{contact.phone}</a>
+					<a href={`mailto:${contact.email}`}>{contact.email}</a>
+					<a href={contact.facebook}>
+						<svg class="h-7 mt-2" fill="#fff" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Facebook</title><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+					</a>
+				</div>
+			</div>
+		</section>
 	</main>
 </Layout>
 
