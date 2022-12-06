@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
+import CtaCard from '../components/CtaCard.astro';
 const strapiUrl = 'http://localhost:1337';
 const response = await fetch(`${strapiUrl}/graphql`, 
 {
@@ -60,20 +60,7 @@ const homepage = {
 
 <Layout  title="Jeffrey Custom Builds">
 	<main>
-		<section class="cta bg-white p-10 rounded-md shadow-md">
-			<div class="flex">
-				<img 
-				class="w-28	h-28 object-cover rounded-full"
-				src={`${strapiUrl}${homepage.ctaImg}`} 
-				alt={homepage.ctaImgAlt}/>
-				<div class="ml-4">
-					<h2 class="text-gray-800 text-3xl font-serif" >{homepage.ctaTitle}</h2>
-					<p class="text-gray-600 mt-2">{homepage.ctaDescr}</p>
-					<a class="rounded bg-slate-900 text-white px-4 py-2 mt-4 inline-block text-sm" href="#">{homepage.ctaBtnText}</a>
-				</div>
-			</div>
-		</section>
-		<p>{homepage.ctaDescr}</p>
+		<CtaCard strapiUrl={strapiUrl} image={homepage.ctaImg} title={homepage.ctaTitle} descr={homepage.ctaDescr} btnText={homepage.ctaBtnText} alt={homepage.ctaImgAlt}/>
 		<pre>{JSON.stringify(data, null, 2)}</pre>
 	</main>
 </Layout>
