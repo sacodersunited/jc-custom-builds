@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CtaCard from '../components/CtaCard.astro';
+import Slider from '../components/Slider.jsx';
 import { marked  } from 'marked';
 const strapiUrl = 'http://localhost:1337';
 const response = await fetch(`${strapiUrl}/graphql`, 
@@ -40,6 +41,7 @@ const response = await fetch(`${strapiUrl}/graphql`,
 										name
 										alternativeText
 										formats
+										url
 									}
 								}
 							}
@@ -54,6 +56,7 @@ const response = await fetch(`${strapiUrl}/graphql`,
 
 const json = await response.json();
 const data  = json.data.homepage.data.attributes;
+const carousel = json.data.homepage.data.attributes.carousel;
 // clean up data
 const cta = {
 	title: data.cta_title,
@@ -73,13 +76,13 @@ const contact = {
 	facebook: data.facebook_link,
 }
 
-
 ---
 
 <Layout  title="Jeffrey Custom Builds">
+	<Slider strapiUrl={strapiUrl} images={carousel} client:only="react" />
 	<main>
 		<CtaCard strapiUrl={strapiUrl} image={cta.img} title={cta.title} descr={cta.descr} btnText={cta.btnText} alt={cta.imgAlt}/>
-		<!-- <pre>{JSON.stringify(contact, null, 2)}</pre> -->
+		<!-- <pre>{JSON.stringify(carousel, null, 2)}</pre> -->
 		<section id="contact" class="md:flex mt-48">
 			<div class="left">
 				<h2 class="text-3xl font-serif">{contact.title}</h2>
