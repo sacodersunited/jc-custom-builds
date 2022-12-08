@@ -16,9 +16,9 @@ export default function SimpleSlider({images, strapiUrl}) {
     <>
     <Slider {...settings}>
     {images.data.map((image) => (
-      <div>
+      <div key={image.attributes.name}>
         <img 
-          class="object-cover h-60 w-full"
+          className="object-cover h-60 w-full"
           src={`${strapiUrl}${image.attributes.url}`} />
       </div>
     ))}    

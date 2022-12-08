@@ -1,17 +1,16 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import CtaCard from '../components/CtaCard.astro';
-import Slider from '../components/Slider.jsx';
-import { marked  } from 'marked';
-const strapiUrl = 'http://localhost:1337';
-const response = await fetch(`${strapiUrl}/graphql`, 
-{
-	method: 'POST',
-	headers: {
-		'Content-Type': 'application/json',
-	},
-	body: JSON.stringify({
-		query: `
+import Layout from "../layouts/Layout.astro"
+import CtaCard from "../components/CtaCard.astro"
+import Slider from "../components/Slider.jsx"
+import { marked } from "marked"
+const strapiUrl = "http://localhost:1337"
+const response = await fetch(`${strapiUrl}/graphql`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    query: `
 			query {
 				homepage {
 					data {
@@ -45,62 +44,131 @@ const response = await fetch(`${strapiUrl}/graphql`,
 									}
 								}
 							}
+							services_title
+       				services_descr
 						}
 					}
-				}
-			}
+				} 
+				projects{
+    			data{
+      			attributes{
+        			Title
+        			Description
+        			subtitle
+        			featured_after{
+							data{
+								attributes{
+									name
+									alternativeText
+									formats
+								}
+          		}
+        		}
+      		}
+    		}
+  		}
+		}	
+		`
+  })
+})
 
-		`,
-	}),
-});
-
-const json = await response.json();
-const data  = json.data.homepage.data.attributes;
-const carousel = json.data.homepage.data.attributes.carousel;
+const json = await response.json()
+const homepageData = json.data.homepage.data.attributes
+const projects = json.data.projects.data
+const carousel = json.data.homepage.data.attributes.carousel
 // clean up data
 const cta = {
-	title: data.cta_title,
-	descr: data.cta_descr,
-	img: data.cta_img.data.attributes.formats.small.url,
-	imgAlt: data.cta_img.data.attributes.alternativeText,
-	btnText: data.cta_btn_text,
+  title: homepageData.cta_title,
+  descr: homepageData.cta_descr,
+  img: homepageData.cta_img.data.attributes.formats.small.url,
+  imgAlt: homepageData.cta_img.data.attributes.alternativeText,
+  btnText: homepageData.cta_btn_text
 }
 
 const contact = {
-	title: data.contact_title,
-	descr: marked.parse(data.contact_descr),
-	name: data.contact_name,
-	position: data.contact_position,
-	phone: data.contact_phone_number,
-	email: data.contact_email,
-	facebook: data.facebook_link,
+  title: homepageData.contact_title,
+  descr: marked.parse(homepageData.contact_descr),
+  name: homepageData.contact_name,
+  position: homepageData.contact_position,
+  phone: homepageData.contact_phone_number,
+  email: homepageData.contact_email,
+  facebook: homepageData.facebook_link
 }
-
 ---
 
-<Layout  title="Jeffrey Custom Builds">
-	<Slider strapiUrl={strapiUrl} images={carousel} client:only="react" />
-	<main>
-		<CtaCard strapiUrl={strapiUrl} image={cta.img} title={cta.title} descr={cta.descr} btnText={cta.btnText} alt={cta.imgAlt}/>
-		<!-- <pre>{JSON.stringify(carousel, null, 2)}</pre> -->
-		<section id="contact" class="md:flex mt-48">
-			<div class="left">
-				<h2 class="text-3xl font-serif">{contact.title}</h2>
-				<p set:html={contact.descr}/>
-			</div>
-			<div class="right">
-				<div class="bg-slate-600 p-10 rounded-lg text-slate-100 text-center">
-					<h3 class="text-2xl">{contact.name}</h3>
-					<p>{contact.position}</p>
-					<a href={`tel:${contact.phone}`}>{contact.phone}</a>
-					<a href={`mailto:${contact.email}`}>{contact.email}</a>
-					<a href={contact.facebook}>
-						<svg class="h-7 mt-2" fill="#fff" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Facebook</title><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-					</a>
-				</div>
-			</div>
-		</section>
-	</main>
+<Layout title="Jeffrey Custom Builds">
+  <Slider
+    strapiUrl={strapiUrl}
+    images={carousel}
+    client:only="react"
+  />
+  <main>
+    <CtaCard
+      strapiUrl={strapiUrl}
+      image={cta.img}
+      title={cta.title}
+      descr={cta.descr}
+      btnText={cta.btnText}
+      alt={cta.imgAlt}
+    />
+    <!-- <pre>{JSON.stringify(projects, null, 2)}</pre> -->
+    <section
+      id="services"
+      class="mt-24"
+    >
+      <h2 class="text-3xl font-serif mb-3">{homepageData.services_title}</h2>
+      <p
+        class="mb-4"
+        set:html={homepageData.services_descr}
+      />
+      {
+        projects.map((project) => (
+          <div class="md:grid md:grid-cols-3 md:grid-flow-col md:gap-4">
+            <div>
+              <img
+                class="w-full h-40 rounded-t-md"
+                src={`${strapiUrl}${project.attributes.featured_after.data.attributes.formats.small.url}`}
+                alt={project.attributes.featured_after.alternativeText}
+              />
+              <div class="border border-gray-300 p-4 rounded-b-md shadow-md">
+                <h3 class="text-xl mb-2">{project.attributes.Title}</h3>
+                <p class="text-sm text-clip overflow-hidden h-40">
+                  {project.attributes.Description}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </section>
+    <section
+      id="contact"
+      class="md:flex mt-24"
+    >
+      <div class="left">
+        <h2 class="text-3xl font-serif mb-3">{contact.title}</h2>
+        <p set:html={contact.descr} />
+      </div>
+      <div class="right">
+        <div class="bg-slate-600 p-10 rounded-lg text-slate-100 text-center">
+          <h3 class="text-2xl">{contact.name}</h3>
+          <p>{contact.position}</p>
+          <a href={`tel:${contact.phone}`}>{contact.phone}</a>
+          <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          <a href={contact.facebook}>
+            <svg
+              class="h-7 mt-2"
+              fill="#fff"
+              role="img"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              ><title>Facebook</title><path
+                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
 </Layout>
-
-
