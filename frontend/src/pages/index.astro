@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro"
 import CtaCard from "../components/CtaCard.astro"
 import Slider from "../components/Slider.jsx"
 import { marked } from "marked"
-const strapiUrl = "http://localhost:1337"
+const strapiUrl = import.meta.env.STRAPI_URL
 const response = await fetch(`${strapiUrl}/graphql`, {
   method: "POST",
   headers: {

@@ -1,28 +1,29 @@
-import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import React from "react"
+import Slider from "react-slick"
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
 
-export default function SimpleSlider({images, strapiUrl}) {
+export default function SimpleSlider({ images, strapiUrl }) {
   var settings = {
     infinite: true,
     speed: 400,
     slidesToShow: 2,
     slidesToScroll: 1,
-    autoplay: true,
-  };
+    autoplay: true
+  }
 
   return (
     <>
-    <Slider {...settings}>
-    {images.data.map((image) => (
-      <div key={image.attributes.name}>
-        <img 
-          className="object-cover h-60 w-full"
-          src={`${strapiUrl}${image.attributes.url}`} />
-      </div>
-    ))}    
-    </Slider>
+      <Slider {...settings}>
+        {images.data.map((image) => (
+          <div key={image.attributes.name}>
+            <img
+              className="object-cover h-60 w-full"
+              src={`${strapiUrl}${image.attributes.url}`}
+            />
+          </div>
+        ))}
+      </Slider>
     </>
-  );
+  )
 }
