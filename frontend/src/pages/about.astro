@@ -1,11 +1,96 @@
 ---
-import Layout from '../layouts/Layout.astro'
-const title = 'About Us'
----
-<Layout  title={title}>
-	<main>
-    <h1>{title}</h1>
-		
-	</main>
-</Layout>
+import Layout from "../layouts/Layout.astro"
+const title = "About Us"
+import { marked } from "marked"
+const strapiUrl = import.meta.env.STRAPI_URL
+const response = await fetch(`${strapiUrl}/graphql`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    query: `
+			query {
+				about{
+					data{
+						attributes{
+							first_title
+							first_descr
+							second_title
+							second_descr
+							first_img{
+								data{
+									attributes{
+										alternativeText
+										formats
+									}
+								}
+							}
+							second_img{
+								data{
+									attributes{
+										alternativeText
+										formats
+									}
+								}
+							}
+							banner_img{
+								data{
+									attributes{
+										alternativeText
+										url
+									}
+								}
+							}
+						}
+					}
+				}
+		}	
+		`
+  })
+})
 
+const json = await response.json()
+const aboutPageData = json.data.about.data.attributes
+---
+
+<Layout title={title}>
+  <div class="h-60 bg-gradient-to-r from-slate-500 to-slate-900 grid place-items-center">
+    <h1 class="text-center text-white text-3xl font-serif">{title}</h1>
+  </div>
+  <main class="h">
+    <!-- <pre> {JSON.stringify(aboutPageData, null, 2)} </pre> -->
+
+    <div class="grid grid-cols-2 gap-6">
+      <div>
+        <h2 class="text-3xl font-serif mb-2">{aboutPageData.first_title}</h2>
+        <p
+          set:html={marked(aboutPageData.first_descr)}
+          class="text-lg"
+        />
+      </div>
+      <div>
+        <img
+          class="w-full rounded-md"
+          src={`${strapiUrl}${aboutPageData.first_img.data.attributes.formats.small.url}`}
+          alt={aboutPageData.first_img.data.attributes.alternativeText}
+        />
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-6 mt-20">
+      <img
+        class="w-full rounded-md"
+        src={`${strapiUrl}${aboutPageData.second_img.data.attributes.formats.small.url}`}
+        alt={aboutPageData.second_img.data.attributes.alternativeText}
+      />
+      <div>
+        <h2 class="text-3xl font-serif mb-2">{aboutPageData.second_title}</h2>
+        <p
+          set:html={marked(aboutPageData.second_descr)}
+          class="text-lg"
+        />
+      </div>
+      <div></div>
+    </div>
+  </main>
+</Layout>
