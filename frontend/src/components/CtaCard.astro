@@ -1,4 +1,5 @@
 ---
+import { marked } from "marked"
 export interface Props {
   image: string
   title: string
@@ -20,7 +21,10 @@ const { image, alt, title, descr, strapiUrl, btnText } = Astro.props
     />
     <div class="ml-4">
       <h2 class="text-gray-800 text-3xl font-serif">{title}</h2>
-      <p class="text-gray-600 mt-2">{descr}</p>
+      <p
+        set:html={marked(descr)}
+        class="text-gray-600 mt-2"
+      />
       <a
         class="rounded bg-slate-900 text-white px-4 py-2 mt-4 inline-block text-sm"
         href="#contact"

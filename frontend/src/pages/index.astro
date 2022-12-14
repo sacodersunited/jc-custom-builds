@@ -128,7 +128,7 @@ const contact = {
                 src={`${strapiUrl}${project.attributes.featured_after.data.attributes.formats.small.url}`}
                 alt={project.attributes.featured_after.alternativeText}
               />
-              <div class="border border-gray-300 p-4 rounded-b-md shadow-md">
+              <div class="border border-gray-300 p-4 rounded-b-md shadow-md min-h-60">
                 <h3 class="text-xl mb-2">{project.attributes.Title}</h3>
                 <p class="text-sm text-clip overflow-hidden h-40">
                   {project.attributes.Description}
@@ -171,3 +171,9 @@ const contact = {
     </section>
   </main>
 </Layout>
+
+<style>
+  .min-h-60 {
+    min-height: 260px;
+  }
+</style>
