@@ -112,18 +112,16 @@ const contact = {
       alt={cta.imgAlt}
     />
     <!-- <pre>{JSON.stringify(projects, null, 2)}</pre> -->
+    <!-- SERVICES -->
     <section
       id="services"
       class="mt-24"
     >
       <h2 class="text-3xl font-serif mb-3">{homepageData.services_title}</h2>
-      <p
-        class="mb-4"
-        set:html={homepageData.services_descr}
-      />
-      {
-        projects.map((project) => (
-          <div class="md:grid md:grid-cols-3 md:grid-flow-col md:gap-4">
+      <p set:html={marked.parse(homepageData.services_descr)} />
+      <div class="mt-6 md:grid md:grid-cols-3 md:grid-flow-col md:gap-4">
+        {
+          projects.map((project) => (
             <div>
               <img
                 class="w-full h-40 rounded-t-md"
@@ -137,10 +135,11 @@ const contact = {
                 </p>
               </div>
             </div>
-          </div>
-        ))
-      }
+          ))
+        }
+      </div>
     </section>
+    <!-- CONTACT -->
     <section
       id="contact"
       class="md:flex mt-24"
@@ -149,7 +148,7 @@ const contact = {
         <h2 class="text-3xl font-serif mb-3">{contact.title}</h2>
         <p set:html={contact.descr} />
       </div>
-      <div class="right">
+      <div class="right ml-4">
         <div class="bg-slate-600 p-10 rounded-lg text-slate-100 text-center">
           <h3 class="text-2xl">{contact.name}</h3>
           <p>{contact.position}</p>
