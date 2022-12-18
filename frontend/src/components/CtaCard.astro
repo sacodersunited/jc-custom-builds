@@ -1,26 +1,35 @@
 ---
+import { marked } from "marked"
 export interface Props {
-	image: string;
-	title: string;
-	descr: string;
-  strapiUrl: string;
-  alt: string;
-  btnText: string;
+  image: string
+  title: string
+  descr: string
+  strapiUrl: string
+  alt: string
+  btnText: string
 }
 
-const { image, alt, title, descr, strapiUrl, btnText } = Astro.props;
+const { image, alt, title, descr, strapiUrl, btnText } = Astro.props
 ---
 
 <section class="cta bg-white p-10 rounded-md shadow-md">
   <div class="md:flex">
-    <img 
-    class="w-28	h-28 object-cover rounded-full"
-    src={`${strapiUrl}${image}`} 
-    alt={alt}/>
+    <img
+      class="w-28 h-28 object-cover rounded-full"
+      src={`${strapiUrl}${image}`}
+      alt={alt}
+    />
     <div class="ml-4">
-      <h2 class="text-gray-800 text-3xl font-serif" >{title}</h2>
-      <p class="text-gray-600 mt-2">{descr}</p>
-      <a class="rounded bg-slate-900 text-white px-4 py-2 mt-4 inline-block text-sm" href="#contact">{btnText}</a>
+      <h2 class="text-gray-800 text-3xl font-serif">{title}</h2>
+      <p
+        set:html={marked(descr)}
+        class="text-gray-600 mt-2"
+      />
+      <a
+        class="rounded bg-slate-900 text-white px-4 py-2 mt-4 inline-block text-sm"
+        href="#contact"
+        >{btnText}</a
+      >
     </div>
   </div>
 </section>
