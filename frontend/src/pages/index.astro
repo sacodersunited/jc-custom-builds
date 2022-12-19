@@ -71,6 +71,12 @@ const response = await fetch(`${strapiUrl}/graphql`, {
 		`
   })
 })
+// slugify the Title
+const slug = (str) =>
+  str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "")
 
 const json = await response.json()
 const homepageData = json.data.homepage.data.attributes
@@ -94,6 +100,13 @@ const contact = {
   email: homepageData.contact_email,
   facebook: homepageData.facebook_link
 }
+
+const allProjects = projects.map((project) => {
+  return {
+    ...project,
+    slug: slug(project.attributes.Title)
+  }
+})
 ---
 
 <Layout title="Jeffrey Custom Builds">
@@ -118,11 +131,14 @@ const contact = {
       class="mt-24"
     >
       <h2 class="text-3xl font-serif mb-3">{homepageData.services_title}</h2>
-      <p set:html={marked.parse(homepageData.services_descr)} />
+      <p
+        class="w-3/4"
+        set:html={marked.parse(homepageData.services_descr)}
+      />
       <div class="mt-6 md:grid md:grid-cols-3 md:grid-flow-col md:gap-4">
         {
-          projects.map((project) => (
-            <div>
+          allProjects.map((project) => (
+            <a href={`/services/${project.slug}`}>
               <img
                 class="w-full h-40 rounded-t-md"
                 src={`${strapiUrl}${project.attributes.featured_after.data.attributes.formats.small.url}`}
@@ -134,7 +150,7 @@ const contact = {
                   {project.attributes.Description}
                 </p>
               </div>
-            </div>
+            </a>
           ))
         }
       </div>
