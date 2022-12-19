@@ -1,6 +1,8 @@
 ---
 import Layout from "../../layouts/Layout.astro"
 import Header from "../../components/Header.astro"
+import Slider from "../../components/SimpleSlider"
+const strapiUrl = import.meta.env.STRAPI_URL
 // Good example of dynamic routes from Astro docs
 // https://docs.astro.build/en/tutorial/5-astro-api/2/#create-pages-dynamically
 export async function getStaticPaths() {
@@ -79,9 +81,9 @@ const allProjects = projects.map((project) => ({
   subtitle: project.attributes.subtitle,
   slug: slug(project.attributes.Title),
   description: project.attributes.Description,
-  featured_before: project.attributes.featured_before,
-  featured_after: project.attributes.featured_before,
-  all_photos: project.attributes.all_photos.data
+  featured_before: project.attributes.featured_before.data,
+  featured_after: project.attributes.featured_after.data,
+  all_photos: project.attributes.all_photos
 }))
 
 const filteredProject = allProjects.filter((project) => project.slug.includes(service))
@@ -94,10 +96,33 @@ const uniqueProjects = [...new Set(allProjects.map((project) => project.slug))]
       <Layout title={project.title}>
         <Header title={project.title} />
         <main>
-          <section>
+          <section class="mb-16 container">
             <h2 class="text-3xl font-serif mb-3">{project.subtitle}</h2>
-            <p class="md:w-3/4">{project.description}</p>
+            <p class="md:w-3/5">{project.description}</p>
           </section>
+          <section class="mb-16">
+            <div class="md:grid md:grid-cols-2">
+              <div>
+                <img
+                  class="w-full h-72 rounded-md"
+                  src={`${strapiUrl}${project.featured_before.attributes.formats.small.url}`}
+                />
+                <p class="text-center text-xl py-4">Before</p>
+              </div>
+              <div>
+                <img
+                  class="w-full h-72 rounded-md"
+                  src={`${strapiUrl}${project.featured_after.attributes.formats.small.url}`}
+                />
+                <p class="text-center text-xl py-4">After</p>
+              </div>
+            </div>
+          </section>
+          <Slider
+            strapiUrl={strapiUrl}
+            images={project.all_photos}
+            client:only="react"
+          />
         </main>
       </Layout>
     </>
