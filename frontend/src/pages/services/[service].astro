@@ -1,6 +1,8 @@
 ---
-import { stringifyChunk } from "astro/dist/runtime/server"
-
+import Layout from "../../layouts/Layout.astro"
+import Header from "../../components/Header.astro"
+// Good example of dynamic routes from Astro docs
+// https://docs.astro.build/en/tutorial/5-astro-api/2/#create-pages-dynamically
 export async function getStaticPaths() {
   const strapiUrl = import.meta.env.STRAPI_URL
   const response = await fetch(`${strapiUrl}/graphql`, {
@@ -54,6 +56,7 @@ export async function getStaticPaths() {
 
   const json = await response.json()
   const projects = json.data.projects.data
+  // TODO: make this dynamic
   return [
     { params: { service: "accent-walls" }, props: { projects: projects } },
     { params: { service: "sheds-fences-and-decks" }, props: { projects: projects } },
@@ -72,8 +75,13 @@ const slug = (str) =>
     .replace(/(^-|-$)+/g, "")
 
 const allProjects = projects.map((project) => ({
-  ...project,
-  slug: slug(project.attributes.Title)
+  title: project.attributes.Title,
+  subtitle: project.attributes.subtitle,
+  slug: slug(project.attributes.Title),
+  description: project.attributes.Description,
+  featured_before: project.attributes.featured_before,
+  featured_after: project.attributes.featured_before,
+  all_photos: project.attributes.all_photos.data
 }))
 
 const filteredProject = allProjects.filter((project) => project.slug.includes(service))
@@ -82,11 +90,16 @@ const uniqueProjects = [...new Set(allProjects.map((project) => project.slug))]
 
 <!-- <pre>{JSON.stringify(allProjects, null, 2)}</pre> --><!-- <pre>url is {service}</pre> --><!-- <pre>unique is {JSON.stringify(uniqueProjects, null, 2)}</pre> -->{
   filteredProject.map((project) => (
-    <div>
-      <pre>{JSON.stringify(project, null, 2)}</pre>
-      <h1 class="text-3xl">{project.attributes.Title}</h1>
-      <h2 class="text-xl">{project.attributes.subtitle}</h2>
-      <p>{project.attributes.Description}</p>
-    </div>
+    <>
+      <Layout title={project.title}>
+        <Header title={project.title} />
+        <main>
+          <section>
+            <h2 class="text-3xl font-serif mb-3">{project.subtitle}</h2>
+            <p class="md:w-3/4">{project.description}</p>
+          </section>
+        </main>
+      </Layout>
+    </>
   ))
 }
