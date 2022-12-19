@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro"
 import CtaCard from "../components/CtaCard.astro"
-import Slider from "../components/Slider.jsx"
+import Slider from "../components/SimpleSlider.jsx"
 import { marked } from "marked"
 const strapiUrl = import.meta.env.STRAPI_URL
 const response = await fetch(`${strapiUrl}/graphql`, {
@@ -101,6 +101,11 @@ const contact = {
   facebook: homepageData.facebook_link
 }
 
+const services = {
+  title: homepageData.services_title,
+  descr: marked.parse(homepageData.services_descr)
+}
+
 const allProjects = projects.map((project) => {
   return {
     ...project,
@@ -115,7 +120,7 @@ const allProjects = projects.map((project) => {
     images={carousel}
     client:only="react"
   />
-  <main>
+  <main class="container">
     <CtaCard
       strapiUrl={strapiUrl}
       image={cta.img}
@@ -128,23 +133,22 @@ const allProjects = projects.map((project) => {
     <!-- SERVICES -->
     <section
       id="services"
-      class="mt-24"
+      class="mt-16"
     >
-      <h2 class="text-3xl font-serif mb-3">{homepageData.services_title}</h2>
-      <p
-        class="w-3/4"
-        set:html={marked.parse(homepageData.services_descr)}
-      />
+      <h2 class="text-3xl font-serif mb-3">{services.title}</h2>
+      <div class="md:w-3/5">
+        <p set:html={services.descr} />
+      </div>
       <div class="mt-6 md:grid md:grid-cols-3 md:grid-flow-col md:gap-4">
         {
           allProjects.map((project) => (
             <a href={`/services/${project.slug}`}>
               <img
-                class="w-full h-40 rounded-t-md"
+                class="w-full h-40 rounded-t-md mt-4 md:mt-0"
                 src={`${strapiUrl}${project.attributes.featured_after.data.attributes.formats.small.url}`}
                 alt={project.attributes.featured_after.alternativeText}
               />
-              <div class="border border-gray-300 p-4 rounded-b-md shadow-md min-h-60">
+              <div class="border bg-white border-gray-300 p-4 rounded-b-md shadow-md min-h-60">
                 <h3 class="text-xl mb-2">{project.attributes.Title}</h3>
                 <p class="text-sm text-clip overflow-hidden h-40">
                   {project.attributes.Description}
@@ -158,7 +162,7 @@ const allProjects = projects.map((project) => {
     <!-- CONTACT -->
     <section
       id="contact"
-      class="md:flex mt-24"
+      class="md:flex mt-16"
     >
       <div class="left">
         <h2 class="text-3xl font-serif mb-3">{contact.title}</h2>

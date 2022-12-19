@@ -57,9 +57,9 @@ const aboutPageData = json.data.about.data.attributes
 
 <Layout title={title}>
   <Header title={title} />
-  <main>
+  <main class="container">
     <!-- <pre> {JSON.stringify(aboutPageData, null, 2)} </pre> -->
-    <div class="grid grid-cols-2 gap-6">
+    <div class="md:grid md:grid-cols-2 gap-6">
       <div>
         <h2 class="text-3xl font-serif mb-2">{aboutPageData.first_title}</h2>
         <p
@@ -75,7 +75,7 @@ const aboutPageData = json.data.about.data.attributes
         />
       </div>
     </div>
-    <div class="grid grid-cols-2 gap-6 mt-20">
+    <div class="md:grid md:grid-cols-2 gap-6 mt-20">
       <img
         class="w-full rounded-md"
         src={`${strapiUrl}${aboutPageData.second_img.data.attributes.formats.small.url}`}
