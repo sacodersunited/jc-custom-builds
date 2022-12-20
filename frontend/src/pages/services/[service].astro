@@ -56,42 +56,43 @@ export async function getStaticPaths() {
     })
   })
 
+  const slug = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "")
+
   const json = await response.json()
   const projects = json.data.projects.data
-  // TODO: make this dynamic
-  return [
-    { params: { service: "accent-walls" }, props: { projects: projects } },
-    { params: { service: "sheds-fences-and-decks" }, props: { projects: projects } },
-    { params: { service: "interior-and-cabinet-painting" }, props: { projects: projects } }
-  ]
+
+  // add slug to each project
+  const allProjects = projects.map((project) => ({
+    title: project.attributes.Title,
+    subtitle: project.attributes.subtitle,
+    slug: slug(project.attributes.Title),
+    description: project.attributes.Description,
+    featured_before: project.attributes.featured_before.data,
+    featured_after: project.attributes.featured_after.data,
+    all_photos: project.attributes.all_photos
+  }))
+  // filter out duplicate projects
+  const uniqueProjects = [...new Set(allProjects.map((project) => project.slug))]
+
+  return uniqueProjects.map((service) => {
+    const filteredProject = allProjects.filter((project) => project.slug.includes(service))
+    return {
+      params: { service },
+      props: { projects: filteredProject }
+    }
+  })
 }
 
 const { service } = Astro.params
 const { projects } = Astro.props
-
-// slugify the Title
-const slug = (str) =>
-  str
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)+/g, "")
-
-const allProjects = projects.map((project) => ({
-  title: project.attributes.Title,
-  subtitle: project.attributes.subtitle,
-  slug: slug(project.attributes.Title),
-  description: project.attributes.Description,
-  featured_before: project.attributes.featured_before.data,
-  featured_after: project.attributes.featured_after.data,
-  all_photos: project.attributes.all_photos
-}))
-
-const filteredProject = allProjects.filter((project) => project.slug.includes(service))
-const uniqueProjects = [...new Set(allProjects.map((project) => project.slug))]
 ---
 
-<!-- <pre>{JSON.stringify(allProjects, null, 2)}</pre> --><!-- <pre>url is {service}</pre> --><!-- <pre>unique is {JSON.stringify(uniqueProjects, null, 2)}</pre> -->{
-  filteredProject.map((project) => (
+{
+  projects.map((project) => (
     <>
       <Layout title={project.title}>
         <Header title={project.title} />
@@ -101,17 +102,17 @@ const uniqueProjects = [...new Set(allProjects.map((project) => project.slug))]
             <p class="md:w-3/5">{project.description}</p>
           </section>
           <section class="mb-16">
-            <div class="md:grid md:grid-cols-2">
+            <div class="md:grid md:grid-cols-2 gap-4">
               <div>
                 <img
-                  class="w-full h-72 rounded-md"
+                  class="w-full h-80 rounded-md"
                   src={`${strapiUrl}${project.featured_before.attributes.formats.small.url}`}
                 />
                 <p class="text-center text-xl py-4">Before</p>
               </div>
               <div>
                 <img
-                  class="w-full h-72 rounded-md"
+                  class="w-full h-80 rounded-md"
                   src={`${strapiUrl}${project.featured_after.attributes.formats.small.url}`}
                 />
                 <p class="text-center text-xl py-4">After</p>
