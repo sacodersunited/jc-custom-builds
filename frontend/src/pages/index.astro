@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro"
 import CtaCard from "../components/CtaCard.astro"
-import Slider from "../components/Slider.jsx"
+import Slider from "../components/SlickSlider.jsx"
 import { marked } from "marked"
 const strapiUrl = import.meta.env.STRAPI_URL
 const response = await fetch(`${strapiUrl}/graphql`, {
@@ -71,6 +71,12 @@ const response = await fetch(`${strapiUrl}/graphql`, {
 		`
   })
 })
+// slugify the Title
+const slug = (str) =>
+  str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "")
 
 const json = await response.json()
 const homepageData = json.data.homepage.data.attributes
@@ -94,6 +100,18 @@ const contact = {
   email: homepageData.contact_email,
   facebook: homepageData.facebook_link
 }
+
+const services = {
+  title: homepageData.services_title,
+  descr: marked.parse(homepageData.services_descr)
+}
+
+const allProjects = projects.map((project) => {
+  return {
+    ...project,
+    slug: slug(project.attributes.Title)
+  }
+})
 ---
 
 <Layout title="Jeffrey Custom Builds">
@@ -102,7 +120,7 @@ const contact = {
     images={carousel}
     client:only="react"
   />
-  <main>
+  <main class="container">
     <CtaCard
       strapiUrl={strapiUrl}
       image={cta.img}
@@ -115,26 +133,28 @@ const contact = {
     <!-- SERVICES -->
     <section
       id="services"
-      class="mt-24"
+      class="mt-16"
     >
-      <h2 class="text-3xl font-serif mb-3">{homepageData.services_title}</h2>
-      <p set:html={marked.parse(homepageData.services_descr)} />
-      <div class="mt-6 md:grid md:grid-cols-3 md:grid-flow-col md:gap-4">
+      <h2 class="text-3xl font-serif mb-3">{services.title}</h2>
+      <div class="md:w-3/5">
+        <p set:html={services.descr} />
+      </div>
+      <div class="mt-6 md:grid md:grid-cols-3 md:gap-4">
         {
-          projects.map((project) => (
-            <div>
+          allProjects.map((project) => (
+            <a href={`/services/${project.slug}`}>
               <img
-                class="w-full h-40 rounded-t-md"
+                class="w-full h-40 rounded-t-md mt-4 md:mt-0"
                 src={`${strapiUrl}${project.attributes.featured_after.data.attributes.formats.small.url}`}
                 alt={project.attributes.featured_after.alternativeText}
               />
-              <div class="border border-gray-300 p-4 rounded-b-md shadow-md min-h-60">
+              <div class="border bg-white border-gray-300 p-4 rounded-b-md shadow-md min-h-60">
                 <h3 class="text-xl mb-2">{project.attributes.Title}</h3>
                 <p class="text-sm text-clip overflow-hidden h-40">
                   {project.attributes.Description}
                 </p>
               </div>
-            </div>
+            </a>
           ))
         }
       </div>
@@ -142,13 +162,13 @@ const contact = {
     <!-- CONTACT -->
     <section
       id="contact"
-      class="md:flex mt-24"
+      class="md:flex mt-16"
     >
       <div class="left">
         <h2 class="text-3xl font-serif mb-3">{contact.title}</h2>
         <p set:html={contact.descr} />
       </div>
-      <div class="right ml-4">
+      <div class="right mt-2 md:mt-0 md:ml-4">
         <div class="bg-slate-600 p-10 rounded-lg text-slate-100 text-center">
           <h3 class="text-2xl">{contact.name}</h3>
           <p>{contact.position}</p>
