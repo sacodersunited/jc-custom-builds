@@ -2,11 +2,11 @@ module.exports = {
   apps: [
     {
       name: 'strapi-dev',
-      cwd: '/srv/strapi/mystrapiapp',
+      cwd: '/srv/strapi/jc-custom-builds/backend/',
       script: 'npm',
       args: 'start',
       env: {
-        NODE_ENV: 'development',
+        NODE_ENV: 'production',
         DB_HOST: 'localhost',
         DB_PORT: '5432',
         DB_NAME: 'strapi_dev',
