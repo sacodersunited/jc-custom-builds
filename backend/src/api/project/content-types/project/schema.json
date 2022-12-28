@@ -58,6 +58,10 @@
     },
     "subtitle": {
       "type": "string"
+    },
+    "Carousel_title": {
+      "type": "string",
+      "default": "More like this"
     }
   }
 }
