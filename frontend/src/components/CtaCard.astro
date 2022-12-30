@@ -4,19 +4,18 @@ export interface Props {
   image: string
   title: string
   descr: string
-  strapiUrl: string
   alt: string
   btnText: string
 }
 
-const { image, alt, title, descr, strapiUrl, btnText } = Astro.props
+const { image, alt, title, descr, btnText } = Astro.props
 ---
 
 <section class="cta bg-white p-2 md:p-10 rounded-md shadow-md m-auto w-full md:w-10/12">
   <div class="lg:flex">
     <img
       class="m-auto lg:m-0 w-48 h-48 object-cover rounded-full content-start"
-      src={`${strapiUrl}${image}`}
+      src={image}
       alt={alt}
     />
     <div class="ml-8">
