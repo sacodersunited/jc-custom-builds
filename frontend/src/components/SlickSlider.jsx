@@ -3,7 +3,7 @@ import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 
-export default function SlickSlider({ images, strapiUrl }) {
+export default function SlickSlider({ images }) {
   var settings = {
     infinite: true,
     dots: false,
@@ -37,7 +37,7 @@ export default function SlickSlider({ images, strapiUrl }) {
           <div key={image.attributes.name}>
             <img
               className="object-cover h-60 w-full"
-              src={`${strapiUrl}${image.attributes.url}`}
+              src={image.attributes.url}
             />
           </div>
         ))}

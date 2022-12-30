@@ -106,21 +106,20 @@ const { projects } = Astro.props
               <div>
                 <img
                   class="w-full h-80 rounded-md"
-                  src={`${strapiUrl}${project.featured_before.attributes.formats.small.url}`}
+                  src={project.featured_before.attributes.formats.small.url}
                 />
                 <p class="text-center text-xl py-4">Before</p>
               </div>
               <div>
                 <img
                   class="w-full h-80 rounded-md"
-                  src={`${strapiUrl}${project.featured_after.attributes.formats.small.url}`}
+                  src={project.featured_after.attributes.formats.small.url}
                 />
                 <p class="text-center text-xl py-4">After</p>
               </div>
             </div>
           </section>
           <Slider
-            strapiUrl={strapiUrl}
             images={project.all_photos}
             client:only="react"
           />
