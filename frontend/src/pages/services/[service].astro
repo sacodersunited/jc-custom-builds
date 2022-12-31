@@ -21,6 +21,7 @@ export async function getStaticPaths() {
               Title
               subtitle
               Description
+              Carousel_title
               featured_before {
                 data {
                   attributes {
@@ -69,6 +70,7 @@ export async function getStaticPaths() {
   const allProjects = projects.map((project) => ({
     title: project.attributes.Title,
     subtitle: project.attributes.subtitle,
+    carouselTitle: project.attributes.Carousel_title,
     slug: slug(project.attributes.Title),
     description: project.attributes.Description,
     featured_before: project.attributes.featured_before.data,
@@ -101,28 +103,31 @@ const { projects } = Astro.props
             <h2 class="text-3xl font-serif mb-3">{project.subtitle}</h2>
             <p class="md:w-3/5">{project.description}</p>
           </section>
-          <section class="mb-16">
+          <section class="mb-16 container">
             <div class="md:grid md:grid-cols-2 gap-4">
               <div>
                 <img
-                  class="w-full h-80 rounded-md"
+                  class="w-full h-80 rounded-md object-cover object-center"
                   src={project.featured_before.attributes.formats.small.url}
                 />
                 <p class="text-center text-xl py-4">Before</p>
               </div>
               <div>
                 <img
-                  class="w-full h-80 rounded-md"
+                  class="w-full h-80 rounded-md object-cover object-center"
                   src={project.featured_after.attributes.formats.small.url}
                 />
                 <p class="text-center text-xl py-4">After</p>
               </div>
             </div>
           </section>
-          <Slider
-            images={project.all_photos}
-            client:only="react"
-          />
+          <section class="mb-16 bg-slate-200 py-28">
+            <h2 class="text-3xl font-serif mb-10 container">{project.carouselTitle}</h2>
+            <Slider
+              images={project.all_photos}
+              client:only="react"
+            />
+          </section>
         </main>
       </Layout>
     </>
