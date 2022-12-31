@@ -1,7 +1,6 @@
 // path: ./config/plugins.js
 
 module.exports = ({ env }) => ({
-  // ...
   upload: {
     config: {
       provider: "aws-s3",
@@ -15,5 +14,17 @@ module.exports = ({ env }) => ({
       },
     },
   },
-  // ...
+  email: {
+    config: {
+      provider: "sendgrid",
+      providerOptions: {
+        apiKey: env("SENDGRID_API_KEY"),
+      },
+      settings: {
+        defaultFrom: "frank.pigeonjr@gmail.com",
+        defaultReplyTo: "frank.pigeonjr@gmail.com",
+        testAddress: "frank.pigeonjr@gmail.com",
+      },
+    },
+  },
 });
