@@ -5,4 +5,4 @@
 Website for Jeffrey's handyman services small business in San Antonio, TX.
 
 - Frontend is built with [Astro](https://astro.build/) and hosted on [Netlify](https://app.netlify.com/sites/jc-custom-builds/overview).
-- Backend is built with [Strapi](https://strapi.io/) and hosted on [Railway](jc-custom-builds-production.up.railway.app).
+- Backend is built with [Strapi](https://strapi.io/) and hosted on [Railway](https://jc-custom-builds-production.up.railway.app).
