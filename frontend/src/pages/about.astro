@@ -60,7 +60,7 @@ const aboutPageData = json.data.about.data.attributes
   <main class="container">
     <div class="md:grid md:grid-cols-2 gap-6">
       <div>
-        <h2 class="text-3xl font-serif mb-2">{aboutPageData.first_title}</h2>
+        <h2 class="text-3xl text-slate-900 font-serif mb-2">{aboutPageData.first_title}</h2>
         <p
           set:html={marked(aboutPageData.first_descr)}
           class="text-lg"
@@ -81,7 +81,7 @@ const aboutPageData = json.data.about.data.attributes
         alt={aboutPageData.second_img.data.attributes.alternativeText}
       />
       <div>
-        <h2 class="text-3xl font-serif mb-2">{aboutPageData.second_title}</h2>
+        <h2 class="text-3xl text-slate-900 font-serif mb-2">{aboutPageData.second_title}</h2>
         <p
           set:html={marked(aboutPageData.second_descr)}
           class="text-lg"

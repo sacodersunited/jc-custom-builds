@@ -31,7 +31,7 @@ export default function SlickSlider({ images }) {
   }
 
   return (
-    <>
+    <div className="2xl:container">
       <Slider {...settings}>
         {images.data.map((image) => (
           <div key={image.attributes.name}>
@@ -42,6 +42,6 @@ export default function SlickSlider({ images }) {
           </div>
         ))}
       </Slider>
-    </>
+    </div>
   )
 }
