@@ -100,7 +100,7 @@ const { projects } = Astro.props
         <Header title={project.title} />
         <main>
           <section class="mb-16 container">
-            <h2 class="text-3xl font-serif mb-3">{project.subtitle}</h2>
+            <h2 class="text-3xl font-serif mb-3 text-slate-900">{project.subtitle}</h2>
             <p class="md:w-3/5">{project.description}</p>
           </section>
           <section class="mb-16 container">
@@ -122,7 +122,9 @@ const { projects } = Astro.props
             </div>
           </section>
           <section class="mb-16 bg-slate-200 py-28">
-            <h2 class="text-3xl font-serif mb-10 container">{project.carouselTitle}</h2>
+            <h2 class="text-3xl text-slate-900 font-serif mb-10 container">
+              {project.carouselTitle}
+            </h2>
             <Slider
               images={project.all_photos}
               client:only="react"
