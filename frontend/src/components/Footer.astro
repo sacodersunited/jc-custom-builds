@@ -1,0 +1,115 @@
+---
+const strapiUrl = import.meta.env.STRAPI_URL
+const response = await fetch(`${strapiUrl}/graphql`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    query: `
+			query {
+				homepage {
+					data {
+						attributes {
+							contact_phone_number
+							contact_email
+							facebook_link
+						}
+					}
+				} 
+				projects{
+    			data{
+      			attributes{
+        			Title
+      		}
+    		}
+  		}
+		}	
+		`
+  })
+})
+// slugify the Title
+const slug = (str) =>
+  str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "")
+
+const json = await response.json()
+const homepageData = json.data.homepage.data.attributes
+const projects = json.data.projects.data
+
+const contact = {
+  name: homepageData.contact_name,
+  phone: homepageData.contact_phone_number,
+  email: homepageData.contact_email,
+  facebook: homepageData.facebook_link
+}
+
+const allProjects = projects.map((project) => {
+  return {
+    ...project,
+    slug: slug(project.attributes.Title)
+  }
+})
+---
+
+<footer class="bg-slate-900 text-slate-400 text-sm py-10 md:py-16">
+  <div class="container">
+    <div class="md:grid md:grid-cols-3">
+      <div>
+        <p class="text-base">
+          {`© ${new Date().getFullYear()}`} Jeffrey Custom Builds
+        </p>
+        <p>
+          <a href={contact.facebook}>
+            <svg
+              class="h-5 mt-4"
+              fill="#93A3B7"
+              role="img"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              ><title>Facebook</title><path
+                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+              ></path>
+            </svg>
+          </a>
+        </p>
+      </div>
+      <div>
+        <h2 class="text-base my-2 underline md:mt-0">Contacts us</h2>
+        <a
+          class="block mb-1"
+          href={`tel:${contact.phone}`}
+        >
+          {contact.phone}
+        </a>
+        <a
+          class="block mb-1"
+          href={`mailto:${contact.email}`}
+        >
+          {contact.email}
+        </a>
+      </div>
+      <div class="mb-4">
+        <h2 class="text-base underline my-2 md:mt-0">Services</h2>
+        <ul>
+          {
+            allProjects.map((project) => (
+              <li class="mb-1">
+                <a href={`/services/${project.slug}`}>{project.attributes.Title}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+<div class="bg-slate-800 text-slate-400">
+  <div class="container">
+    <p class="border-l-2 pl-2 border-solid border-emerald-200">
+      website by <a href="https://sacodersunited.com">sacodersunited</a>
+    </p>
+  </div>
+</div>
