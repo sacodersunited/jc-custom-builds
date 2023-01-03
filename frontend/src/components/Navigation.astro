@@ -1,33 +1,39 @@
 ---
+import Logo from "../images/jc-logo.png"
 ---
 
-<nav class="bg-gray-800 text-gray-200 p-5 text-sm">
-  <div class="flex justify-around container">
+<nav class="bg-gray-800 text-gray-300 p-5 text-lg">
+  <div class="flex justify-around items-center container">
     <div>
       <a
-        class="ml-2"
+        class="md:ml-2 p-3 hover:text-emerald-500 transition duration-200 ease-in-out"
         href="/"
         >Home</a
       >
       <a
-        class="ml-5"
+        class="md:ml-5 p-3 hover:text-emerald-500 transition duration-200 ease-in-out"
         href="/#services"
         >Services</a
       >
     </div>
     <a
-      class="ml-2"
+      class="md:ml-2 hidden md:inline-block"
       href="/"
-      >LOGO</a
     >
+      <img
+        class="h-28 object-contain"
+        src={Logo}
+        alt="jc-custom logo"
+      />
+    </a>
     <div>
       <a
-        class="ml-2"
+        class="md:ml-2 p-3 hover:text-emerald-500 transition duration-200 ease-in-out"
         href="/about"
         >About</a
       >
       <a
-        class="ml-5"
+        class="md:ml-5 p-3 hover:text-emerald-500 transition duration-200 ease-in-out"
         href="/#contact"
         >Contact</a
       >
