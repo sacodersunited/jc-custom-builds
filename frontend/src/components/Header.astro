@@ -6,6 +6,10 @@ export interface Props {
 const { title } = Astro.props
 ---
 
-<div class="h-60 bg-gradient-to-r from-slate-500 to-slate-900 grid place-items-center mb-16">
-  <h1 class="text-center text-white text-5xl font-serif">{title}</h1>
+<div
+  class="h-40 md:h-60 bg-gradient-to-r from-blue-400 to-emerald-400 grid place-items-center mb-16"
+>
+  <h1 class="text-center text-white text-3xl md:text-5xl font-serif">
+    {title}
+  </h1>
 </div>
