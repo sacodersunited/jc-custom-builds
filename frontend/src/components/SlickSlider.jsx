@@ -31,7 +31,7 @@ export default function SlickSlider({ images }) {
   }
 
   return (
-    <div className="2xl:container">
+    <div>
       <Slider {...settings}>
         {images.data.map((image) => (
           <div key={image.attributes.name}>
